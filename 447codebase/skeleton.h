@@ -18,7 +18,7 @@
 
 #include "simpleMath.h"
 
-
+struct _GLMmodel;
 
 struct Joint
 {
@@ -58,6 +58,9 @@ public:
     bool hasJointSelected;   
 	std::size_t selectedJoint;
 	std::vector<float> weights;
+	std::vector <float> vertices;
+	std::vector <float> verticesCopy;
+
     Skeleton(){hasJointSelected = false;};
     /*
      * Load Skeleton file
@@ -88,6 +91,10 @@ public:
 	void update(std::size_t rootJoint);
 
 	bool loadWeights(const std::string &file);
+
+	void updateSkin(_GLMmodel *model);
+
+	void initSkin(_GLMmodel *model);
 };
 
 #endif

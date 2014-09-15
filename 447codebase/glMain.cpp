@@ -454,7 +454,7 @@ void display()
 	glPopMatrix();
 
     glPushMatrix();
-
+	myDefMesh.mySkeleton.updateSkin(myDefMesh.pmodel);
     myDefMesh.glDraw(meshModel);
     
     glPopMatrix();

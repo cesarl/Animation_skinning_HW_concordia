@@ -15,6 +15,7 @@ DefMesh::DefMesh()
     }
     mySkeleton.loadSkeleton("./model/skeleton.out");
 	assert(mySkeleton.loadWeights("./model/weights.out"));
+	mySkeleton.initSkin(pmodel);
 }
 void DefMesh::glDraw(int type)
 {

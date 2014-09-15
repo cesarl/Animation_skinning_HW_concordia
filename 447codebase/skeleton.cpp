@@ -2,6 +2,7 @@
 #include "splitstring.h"
 #include <cmath>
 #include <glm/gtc/matrix_transform.hpp>
+#include "glm.h"
 
 /*
  * Load skeleton file
@@ -212,4 +213,41 @@ bool Skeleton::loadWeights(const std::string &file)
 			weights.push_back(std::atof(e.c_str()));
 	}
 	return true;
+}
+
+void Skeleton::updateSkin(GLMmodel *model)
+{
+	verticesCopy.resize(vertices.size());
+	for (auto i = 0; i < vertices.size() / 3; ++i)
+	{
+		auto index = i * 3;
+		glm::vec4 v(vertices[index], vertices[index + 1], vertices[index + 2], 1);
+		glm::vec4 p(0,0,0,1);
+
+		auto wi = i * (joints.size() - 1);
+		for (auto j = 1; j < joints.size(); ++j)
+		{
+			p += joints[j].global * v * weights[wi + j - 1];
+//			p += v * glm::vec4(joints[j].position, 1) * weights[wi + j - 1];
+		}
+		//glm::vec3(model->position[0], model->position[1], model->position[2)]
+		//p = p - v;
+		verticesCopy[index] = p.x;
+		verticesCopy[index + 1] = p.y;
+		verticesCopy[index + 2] = p.z;
+	}
+	model->vertices = verticesCopy.data();
+}
+
+void Skeleton::initSkin(GLMmodel *model)
+{
+	for (auto i = 0; i < model->numvertices * 3; ++i)
+	{
+		//if (i <= 2)
+		//	continue;
+		vertices.push_back(model->vertices[i]);
+	}
+	//model->numvertices--;
+	free(model->vertices);
+	model->vertices = nullptr;
 }
