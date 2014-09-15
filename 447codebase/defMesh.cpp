@@ -14,6 +14,7 @@ DefMesh::DefMesh()
         glmFacetNormals(pmodel);
     }
     mySkeleton.loadSkeleton("./model/skeleton.out");
+	assert(mySkeleton.loadWeights("./model/weights.out"));
 }
 void DefMesh::glDraw(int type)
 {

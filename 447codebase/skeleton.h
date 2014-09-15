@@ -53,11 +53,11 @@ class Skeleton
 private:
     /*Update screen coordinates of joints*/
     void updateScreenCoord();
-    
 public:
     std::vector<Joint> joints;
     bool hasJointSelected;   
 	std::size_t selectedJoint;
+	std::vector<float> weights;
     Skeleton(){hasJointSelected = false;};
     /*
      * Load Skeleton file
@@ -86,6 +86,8 @@ public:
 	void initSkeleton(std::size_t rootJoint);
 
 	void update(std::size_t rootJoint);
+
+	bool loadWeights(const std::string &file);
 };
 
 #endif
