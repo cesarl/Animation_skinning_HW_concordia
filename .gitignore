@@ -15,6 +15,7 @@ local.properties
 .classpath
 .settings/
 .loadpath
+.opensdf
 
 # External tool builders
 .externalToolBuilders/
