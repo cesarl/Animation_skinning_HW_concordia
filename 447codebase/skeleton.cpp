@@ -3,6 +3,7 @@
 #include <cmath>
 #include <glm/gtc/matrix_transform.hpp>
 #include "glm.h"
+#include <limits>
 
 /*
  * Load skeleton file
@@ -205,49 +206,57 @@ bool Skeleton::loadWeights(const std::string &file)
 	std::ifstream skelFile(file.c_str());
 	if (!skelFile.is_open())
 		return false;
+	auto counter = 0;
+	for (auto i = 0; i < joints.size() - 1; ++i)
+			weights.push_back(0.0f);
 	while (std::getline(skelFile, line))
 	{
 		splitstring splitStr(line);
 		auto tmpVec = splitStr.split(' ');
 		for (auto &e : tmpVec)
 			weights.push_back(std::atof(e.c_str()));
+		++counter;
 	}
 	return true;
 }
 
 void Skeleton::updateSkin(GLMmodel *model)
 {
-	verticesCopy.resize(vertices.size());
-	for (auto i = 0; i < vertices.size() / 3; ++i)
+	for (auto i = 0; i <= model->numvertices * 3; i+=3)
 	{
-		auto index = i * 3;
-		glm::vec4 v(vertices[index], vertices[index + 1], vertices[index + 2], 1);
+		glm::vec4 v(vertices[i], vertices[i + 1], vertices[i + 2], 1);
 		glm::vec4 p(0,0,0,1);
+//		p = v;
 
-		auto wi = i * (joints.size() - 1);
-		for (auto j = 1; j < joints.size(); ++j)
+		auto wi = (i / 3) * (joints.size() - 1);
+		for (auto j = 0; j < joints.size() - 1; ++j)
 		{
-			p += joints[j].global * v * weights[wi + j - 1];
-//			p += v * glm::vec4(joints[j].position, 1) * weights[wi + j - 1];
+			auto &joint = joints[j + 1];
+			//p += joint.local * glm::inverse(joint.offset) * weights[wi + j] * v * joint.offset;
+			p += (v * joint.global) * weights[wi + j];
+			//p += v * glm::inverse(joint.offset) * joint.global * weights[wi + j];
 		}
-		//glm::vec3(model->position[0], model->position[1], model->position[2)]
-		//p = p - v;
-		verticesCopy[index] = p.x;
-		verticesCopy[index + 1] = p.y;
-		verticesCopy[index + 2] = p.z;
+
+		verticesCopy[i] = p.x;
+		verticesCopy[i + 1] = p.y;
+		verticesCopy[i + 2] = p.z;
 	}
-	model->vertices = verticesCopy.data();
+	model->vertices = verticesCopy;
 }
 
 void Skeleton::initSkin(GLMmodel *model)
 {
-	for (auto i = 0; i < model->numvertices * 3; ++i)
-	{
-		//if (i <= 2)
-		//	continue;
-		vertices.push_back(model->vertices[i]);
-	}
-	//model->numvertices--;
+	vertices = (GLfloat*)malloc(sizeof(GLfloat) *
+		3 * (model->numvertices + 1));
+	verticesCopy = (GLfloat*)malloc(sizeof(GLfloat) *
+		3 * (model->numvertices + 1));
+	vertices = (GLfloat*)memcpy((void*)vertices, (void*)model->vertices, sizeof(GLfloat) * 3 * (model->numvertices + 1));
+	memset((void*)verticesCopy, 0, sizeof(GLfloat) * 3 * (model->numvertices + 1));
+	//for (auto i = 0; i < model->numvertices * 3; ++i)
+	//{
+	//	vertices.push_back(model->vertices[i]);
+	//}
 	free(model->vertices);
 	model->vertices = nullptr;
+	model->vertices = vertices;
 }

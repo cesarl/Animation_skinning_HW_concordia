@@ -58,8 +58,8 @@ public:
     bool hasJointSelected;   
 	std::size_t selectedJoint;
 	std::vector<float> weights;
-	std::vector <float> vertices;
-	std::vector <float> verticesCopy;
+	GLfloat* vertices;
+	GLfloat* verticesCopy;
 
     Skeleton(){hasJointSelected = false;};
     /*

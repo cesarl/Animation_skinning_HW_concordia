@@ -430,7 +430,7 @@ void mouseMoveEvent(int x, int y)
 		auto &joint = myDefMesh.mySkeleton.joints[myDefMesh.mySkeleton.selectedJoint];
 		auto &parent = myDefMesh.mySkeleton.joints[joint.parent];
 		std::cout << x << std::endl;
-		joint.local = glm::rotate(joint.local * glm::inverse(joint.offset), x >= width / 2 ? 0.1f : -0.1f, glm::vec3(_x, _y, _z)) * joint.offset;
+		joint.local = glm::rotate(joint.local * glm::inverse(joint.offset), x >= width / 2 ? 0.4f : -0.4f, glm::vec3(_x, _y, _z)) * joint.offset;
 		myDefMesh.mySkeleton.update(parent.id);
     }
 }
