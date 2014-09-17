@@ -233,8 +233,9 @@ void Skeleton::updateSkin(GLMmodel *model)
 		{
 			auto &joint = joints[j + 1];
 			//p += joint.local * glm::inverse(joint.offset) * weights[wi + j] * v * joint.offset;
-			p += (v * joint.global) * weights[wi + j];
-			//p += v * glm::inverse(joint.offset) * joint.global * weights[wi + j];
+			//p += (v * joint.global) * weights[wi + j];
+			p += v * glm::inverse(joint.offset) * joint.global * weights[wi + j];
+			//p += (glm::vec4(joint.position, 1) - v) * weights[wi + j];
 		}
 
 		verticesCopy[i] = p.x;
