@@ -430,7 +430,23 @@ void mouseMoveEvent(int x, int y)
 		auto &joint = myDefMesh.mySkeleton.joints[myDefMesh.mySkeleton.selectedJoint];
 		auto &parent = myDefMesh.mySkeleton.joints[joint.parent];
 		std::cout << x << std::endl;
-		joint.local = glm::rotate(joint.local * glm::inverse(joint.offset), x >= width / 2 ? 0.4f : -0.4f, glm::vec3(_x, _y, _z)) * joint.offset;
+		//joint.local = glm::rotate(joint.local * glm::inverse(joint.offset), x >= width / 2 ? 0.4f : -0.4f, glm::vec3(_x, _y, _z)) * joint.offset;
+
+		auto t = glm::translate(glm::mat4(1), -glm::vec3(joint.bindPos - parent.bindPos));
+		t = glm::rotate(t, 0.5f, glm::vec3(_x, _y, _z));
+		t = glm::translate(t, glm::vec3(joint.bindPos - parent.bindPos));;
+		joint.local *= t;
+
+
+		//std::cout << joint.local[0][0] << " " << joint.local[0][1] << " " << joint.local[0][2] << " " << joint.local[0][3] << "\n"
+		//	<< joint.local[1][0] << " " << joint.local[1][1] << " " << joint.local[1][2] << " " << joint.local[1][3] << "\n"
+		//	<< joint.local[2][0] << " " << joint.local[2][1] << " " << joint.local[2][2] << " " << joint.local[2][3] << "\n"
+		//	<< joint.local[3][0] << " " << joint.local[3][1] << " " << joint.local[3][2] << " " << joint.local[3][3] << std::endl;
+		//std::cout << std::endl << std::endl;
+//		joint.local = glm::rotate(glm::inverse(joint.offset) * joint.local, 1.5f, glm::vec3(0, 0, 1));
+
+//		joint.local = glm::translate(glm::rotate(glm::translate(glm::mat4(1), joint.position - parent.position), 0.5f, glm::vec3(0,0,1)), parent.position);
+
 		myDefMesh.mySkeleton.update(parent.id);
     }
 }

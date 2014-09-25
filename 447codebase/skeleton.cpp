@@ -163,14 +163,19 @@ void Skeleton::initSkeleton(std::size_t rootJoint)
 	if (rootJoint >= joints.size())
 		return;
 	auto &joint = joints[rootJoint];
+	std::cout << rootJoint << std::endl;
 	if (rootJoint == 0)
 		joint.local = glm::translate(glm::mat4(1), joint.position);
 	else
 	{
 		joint.local = glm::translate(glm::mat4(1), joint.position - joints[joint.parent].position);
 	}
-	joint.global = glm::translate(glm::mat4(1), joint.position);
-	joint.offset = joint.local;
+	if (rootJoint == 0)
+		joint.global = glm::translate(glm::mat4(1), joint.position);
+	else
+		joint.global = glm::mat4(1);
+	joint.offset = glm::inverse(glm::translate(glm::mat4(1), joint.position));
+	joint.bindPos = glm::vec4(joint.position, 1);
 	for (auto &e : joint.children)
 	{
 		initSkeleton(e);
@@ -186,14 +191,15 @@ void Skeleton::update(std::size_t rootJoint)
 	if (rootJoint != 0)
 	{
 		auto &parent = joints[joint.parent];
-		joint.global = parent.global * joint.local;
-		glm::vec4 p = joint.global * glm::vec4(0, 0, 0, 1);//joint.local * glm::vec4(parent.position.x, parent.position.y, parent.position.z, 1);
-		joint.position = glm::vec3(p.x, p.y, p.z);
-		//glm::mat4 trans(1);
-		//trans = glm::translate(trans, joint.position - parent.position);
+		joint.global =  parent.global * joint.local;
+		//if (rootJoint == 13)
+		//	joint.global = glm::rotate(glm::mat4(1), 90.0f, glm::vec3(0, 0, 1)) * joint.local * parent.global;
 	}
 	else
 		joint.global = joint.local;
+
+	glm::vec4 p = joint.global * glm::vec4(0,0,0,1);//joint.local * glm::vec4(parent.position.x, parent.position.y, parent.position.z, 1);
+	joint.position = glm::vec3(p.x, p.y, p.z);
 	for (auto &e : joint.children)
 	{
 		update(e);
@@ -234,7 +240,10 @@ void Skeleton::updateSkin(GLMmodel *model)
 			auto &joint = joints[j + 1];
 			//p += joint.local * glm::inverse(joint.offset) * weights[wi + j] * v * joint.offset;
 			//p += (v * joint.global) * weights[wi + j];
-			p += v * glm::inverse(joint.offset) * joint.global * weights[wi + j];
+			//->good			//p += v * glm::inverse(joint.offset) * joint.global * weights[wi + j];
+
+			p += joint.global * joint.offset * v * weights[wi + j];
+
 			//p += (glm::vec4(joint.position, 1) - v) * weights[wi + j];
 		}
 

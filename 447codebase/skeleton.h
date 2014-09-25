@@ -27,6 +27,7 @@ struct Joint
 	glm::mat4 local;
 	glm::mat4 global;
 	glm::mat4 offset;
+	glm::vec4 bindPos;
     bool isHovered;
     bool isPicked;
 	std::size_t id;
