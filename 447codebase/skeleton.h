@@ -61,6 +61,9 @@ public:
 	std::vector<float> weights;
 	GLfloat* vertices;
 	GLfloat* verticesCopy;
+	GLfloat* normals;
+	GLfloat* normalsCopy;
+
 
     Skeleton(){hasJointSelected = false;};
     /*

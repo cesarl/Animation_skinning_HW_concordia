@@ -192,13 +192,11 @@ void Skeleton::update(std::size_t rootJoint)
 	{
 		auto &parent = joints[joint.parent];
 		joint.global =  parent.global * joint.local;
-		//if (rootJoint == 13)
-		//	joint.global = glm::rotate(glm::mat4(1), 90.0f, glm::vec3(0, 0, 1)) * joint.local * parent.global;
 	}
 	else
 		joint.global = joint.local;
 
-	glm::vec4 p = joint.global * glm::vec4(0,0,0,1);//joint.local * glm::vec4(parent.position.x, parent.position.y, parent.position.z, 1);
+	glm::vec4 p = joint.global * glm::vec4(0,0,0,1);
 	joint.position = glm::vec3(p.x, p.y, p.z);
 	for (auto &e : joint.children)
 	{
@@ -232,19 +230,12 @@ void Skeleton::updateSkin(GLMmodel *model)
 	{
 		glm::vec4 v(vertices[i], vertices[i + 1], vertices[i + 2], 1);
 		glm::vec4 p(0,0,0,1);
-//		p = v;
 
 		auto wi = (i / 3) * (joints.size() - 1);
 		for (auto j = 0; j < joints.size() - 1; ++j)
 		{
 			auto &joint = joints[j + 1];
-			//p += joint.local * glm::inverse(joint.offset) * weights[wi + j] * v * joint.offset;
-			//p += (v * joint.global) * weights[wi + j];
-			//->good			//p += v * glm::inverse(joint.offset) * joint.global * weights[wi + j];
-
 			p += joint.global * joint.offset * v * weights[wi + j];
-
-			//p += (glm::vec4(joint.position, 1) - v) * weights[wi + j];
 		}
 
 		verticesCopy[i] = p.x;
@@ -262,11 +253,20 @@ void Skeleton::initSkin(GLMmodel *model)
 		3 * (model->numvertices + 1));
 	vertices = (GLfloat*)memcpy((void*)vertices, (void*)model->vertices, sizeof(GLfloat) * 3 * (model->numvertices + 1));
 	memset((void*)verticesCopy, 0, sizeof(GLfloat) * 3 * (model->numvertices + 1));
-	//for (auto i = 0; i < model->numvertices * 3; ++i)
-	//{
-	//	vertices.push_back(model->vertices[i]);
-	//}
+
+	normals = (GLfloat*)malloc(sizeof(GLfloat) *
+		3 * (model->numnormals + 1));
+	normalsCopy = (GLfloat*)malloc(sizeof(GLfloat) *
+		3 * (model->numnormals + 1));
+	normals = (GLfloat*)memcpy((void*)normals, (void*)model->normals, sizeof(GLfloat) * 3 * (model->numnormals + 1));
+	memset((void*)normalsCopy, 0, sizeof(GLfloat) * 3 * (model->numnormals + 1));
+
 	free(model->vertices);
+	free(model->normals);
+
 	model->vertices = nullptr;
 	model->vertices = vertices;
+
+	model->normals = nullptr;
+	model->normals = normals;
 }
