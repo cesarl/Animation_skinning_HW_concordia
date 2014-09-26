@@ -175,7 +175,7 @@ void Skeleton::initSkeleton(std::size_t rootJoint)
 	else
 		joint.global = glm::mat4(1);
 	joint.offset = glm::inverse(glm::translate(glm::mat4(1), joint.position));
-	joint.bindPos = glm::vec4(joint.position, 1);
+	joint.localOffset = joint.local;
 	for (auto &e : joint.children)
 	{
 		initSkeleton(e);

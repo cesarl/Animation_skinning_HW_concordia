@@ -348,6 +348,12 @@ void mouseMoveEvent(int x, int y)
     const int dx = x - _mouseX;
     const int dy = y - _mouseY;
 
+	static int mouseDepX = x;
+	static int mouseLastX = x;
+
+	mouseDepX = x - mouseLastX;
+	mouseLastX = x;
+
     if (!myDefMesh.mySkeleton.hasJointSelected)
     {
         bool changed = false;
@@ -430,10 +436,12 @@ void mouseMoveEvent(int x, int y)
 		auto &joint = myDefMesh.mySkeleton.joints[myDefMesh.mySkeleton.selectedJoint];
 		auto &parent = myDefMesh.mySkeleton.joints[joint.parent];
 
-		auto t = glm::translate(glm::mat4(1), -glm::vec3(joint.bindPos - parent.bindPos));
-		t = glm::rotate(t, x >= width / 2 ? 0.4f : -0.4f, glm::vec3(_x, _y, _z));
-		t = glm::translate(t, glm::vec3(joint.bindPos - parent.bindPos));;
-		joint.local *= t;
+		//auto t = glm::translate(glm::mat4(1), -glm::vec3(joint.bindPos - parent.bindPos));
+		//t = glm::rotate(t, x >= width / 2 ? 0.4f : -0.4f, glm::vec3(_x, _y, _z));
+		//t = glm::translate(t, glm::vec3(joint.bindPos - parent.bindPos));;
+		//joint.local *= t;
+
+		joint.local = glm::rotate(joint.local * glm::inverse(joint.localOffset), mouseDepX >= 0.0 ? 4.0f : -4.0f, glm::vec3(_x, _y, _z)) * joint.localOffset;
 
 		myDefMesh.mySkeleton.update(parent.id);
     }
