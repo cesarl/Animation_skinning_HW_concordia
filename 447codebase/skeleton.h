@@ -22,12 +22,12 @@ struct _GLMmodel;
 
 struct Joint
 {
-    glm::vec3 position;
-    glm::vec2 screenCoord;
-	glm::mat4 local;
-	glm::mat4 global;
-	glm::mat4 offset;
-	glm::vec4 bindPos;
+	glm::vec3 position; // position of the joint
+    glm::vec2 screenCoord; //screen coord
+	glm::mat4 local; // local transformation matrice relative to parent
+	glm::mat4 global; // global transformation matrice
+	glm::mat4 offset; // global offset of the joint in bind pose
+	glm::vec4 bindPos; // global position of the joint in bind pose
     bool isHovered;
     bool isPicked;
 	std::size_t id;
@@ -66,6 +66,7 @@ public:
 
 
     Skeleton(){hasJointSelected = false;};
+	~Skeleton();
     /*
      * Load Skeleton file
      */

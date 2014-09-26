@@ -270,3 +270,30 @@ void Skeleton::initSkin(GLMmodel *model)
 	model->normals = nullptr;
 	model->normals = normals;
 }
+
+Skeleton::~Skeleton()
+{
+	if (vertices)
+	{
+		delete vertices;
+		vertices = nullptr;
+	}
+
+	if (verticesCopy)
+	{
+		delete verticesCopy;
+		verticesCopy = nullptr;
+	}
+
+	if (normals)
+	{
+		delete normals;
+		normals = nullptr;
+	}
+
+	if (normalsCopy)
+	{
+		delete normalsCopy;
+		normalsCopy = nullptr;
+	}
+}
