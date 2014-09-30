@@ -433,13 +433,8 @@ void mouseMoveEvent(int x, int y)
 
 		if (myDefMesh.mySkeleton.selectedJoint == 0)
 			return;
-		auto &joint = myDefMesh.mySkeleton.joints[myDefMesh.mySkeleton.selectedJoint];
-		auto &parent = myDefMesh.mySkeleton.joints[joint.parent];
-
-		//auto t = glm::translate(glm::mat4(1), -glm::vec3(joint.bindPos - parent.bindPos));
-		//t = glm::rotate(t, x >= width / 2 ? 0.4f : -0.4f, glm::vec3(_x, _y, _z));
-		//t = glm::translate(t, glm::vec3(joint.bindPos - parent.bindPos));;
-		//joint.local *= t;
+		Joint &joint = myDefMesh.mySkeleton.joints[myDefMesh.mySkeleton.selectedJoint];
+		Joint &parent = myDefMesh.mySkeleton.joints[joint.parent];
 
 		joint.local = glm::rotate(joint.local * glm::inverse(joint.localOffset), mouseDepX >= 0.0 ? 4.0f : -4.0f, glm::vec3(_x, _y, _z)) * joint.localOffset;
 

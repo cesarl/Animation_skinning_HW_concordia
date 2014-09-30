@@ -163,7 +163,7 @@ void Skeleton::initSkeleton(std::size_t rootJoint)
 	if (rootJoint >= joints.size())
 		return;
 	auto &joint = joints[rootJoint];
-	std::cout << rootJoint << std::endl;
+
 	if (rootJoint == 0)
 		joint.local = glm::translate(glm::mat4(1), joint.position);
 	else
