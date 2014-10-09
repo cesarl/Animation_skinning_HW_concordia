@@ -17,13 +17,20 @@
     <ClCompile Include="..\447codebase\simpleMath.cpp" />
     <ClCompile Include="..\447codebase\skeleton.cpp" />
     <ClCompile Include="..\447codebase\splitstring.cpp" />
+    <ClCompile Include="vendors\imgui\imgui.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\447codebase\defMesh.h" />
     <ClInclude Include="..\447codebase\glm.h" />
+    <ClInclude Include="..\447codebase\Globals.hpp" />
+    <ClInclude Include="..\447codebase\ImguiConfig.hpp" />
     <ClInclude Include="..\447codebase\simpleMath.h" />
     <ClInclude Include="..\447codebase\skeleton.h" />
     <ClInclude Include="..\447codebase\splitstring.h" />
+    <ClInclude Include="vendors\imgui\imconfig.h" />
+    <ClInclude Include="vendors\imgui\imgui.h" />
+    <ClInclude Include="vendors\imgui\stb_image.h" />
+    <ClInclude Include="vendors\imgui\stb_textedit.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{92914A28-A331-498C-92B7-7FB0B0198EC8}</ProjectGuid>

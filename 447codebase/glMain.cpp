@@ -13,6 +13,7 @@
 #include <cstring>
 #include "skeleton.h"
 #include "defMesh.h"
+#include "ImguiConfig.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -235,7 +236,7 @@ void init()
      glMultMatrixd(_matrix);
      getMatrix();
      glPopMatrix();
-
+	 ImguiConf::InitImGui();
 }
 
 void changeSize(int w, int h)
@@ -275,6 +276,7 @@ void timerFunction(int value)
 }
 void handleKeyPress(unsigned char key, int x, int y)
 { 
+	ImguiConf::key_callback(key, glutGetModifiers());
     switch(key)
     {
         case 'm':
@@ -291,6 +293,12 @@ void mouseEvent(int button, int state, int x, int y)
 
     _mouseX = x;
     _mouseY = y;
+
+	ImguiConf::scroll_callback(x, y);
+	mouse_x = x;
+	mouse_y = y;
+	lMouse = _mouseLeft;
+	rMouse = _mouseRight;
 
     if (state == GLUT_UP)
 	switch (button) {
@@ -353,6 +361,11 @@ void mouseMoveEvent(int x, int y)
 
 	mouseDepX = x - mouseLastX;
 	mouseLastX = x;
+
+	mouse_x = x;
+	mouse_y = y;
+	lMouse = _mouseLeft;
+	rMouse = _mouseRight;
 
     if (!myDefMesh.mySkeleton.hasJointSelected)
     {
@@ -445,6 +458,36 @@ void display()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+     GLfloat ambientLight[] = { 0.3f, 0.3f, 0.3f, 1.0f };
+     GLfloat diffuseLight[] = { 0.7f, 0.7f, 0.7f, 1.0f };
+     GLfloat lightPos[] = {20.0f, 20.0f, 50.0f};
+
+	 changeSize(windowWidth, windowHeight);
+
+	 glEnable(GL_DEPTH_TEST);
+     glFrontFace(GL_CCW);
+     //glEnable(GL_CULL_FACE);
+     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+     // Hidden surface removal // Counterclockwise polygons face out // Do not calculate inside of jet // Enable lighting
+     glEnable(GL_LIGHTING);
+     // Set up and enable light 0
+     glLightfv(GL_LIGHT0,GL_AMBIENT,ambientLight);
+     glLightfv(GL_LIGHT0,GL_DIFFUSE,diffuseLight);
+     glEnable(GL_LIGHT0);
+     // Enable color tracking
+     glEnable(GL_COLOR_MATERIAL);
+     // Set material properties to follow glColor values
+     glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
+
+     glClearColor(0.2f, 0.2f, 0.2f, 3.0f );
+    
+     //Rescale normals to unit length
+     glEnable(GL_NORMALIZE);
+     glLightfv(GL_LIGHT0,GL_POSITION,lightPos);
+
+     glShadeModel(GL_FLAT);
+
+	ImguiConf::UpdateImGui();
 
     glLoadIdentity();
     glMultMatrixd(_matrix);
@@ -465,7 +508,10 @@ void display()
     myDefMesh.glDraw(meshModel);
     
     glPopMatrix();
-    
+
+	ImGui::Button("trou du cul");
+
+	ImGui::Render();
     glutSwapBuffers();
 }
 
