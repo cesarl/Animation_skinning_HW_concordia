@@ -4,6 +4,8 @@
 #include <vector>
 #include <atomic>
 #include <array>
+#include <Keyframe.hpp>
+#include <memory>
 
 	//////////
 	/// VERY DIRTY GLOBALS - Shame on me :(
@@ -17,8 +19,11 @@
 	namespace GLOBALS
 	{
 		bool editing = true;
-		static const std::string transitionNames[4] = { "matrix", "euler angles", "quaternion linear", "quaternion SLERP"};
-		unsigned int transitionMode = 0;
-//		static const std::string animationNames[3] 
+		static const char* transitionNames[4] = { "matrix", "euler angles", "quaternion linear", "quaternion SLERP"};
+		int transitionMode = 0;
+        static const char* animationNames[] = { "none", "wave.anim", "break-dance.anim", "dance.anim" };
+		int animationNbr = 0;
+		int frames = 0;
+		static std::unique_ptr<Timeline> timeline = nullptr;
 	};
 

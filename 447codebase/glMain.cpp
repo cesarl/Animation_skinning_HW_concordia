@@ -509,7 +509,42 @@ void display()
     
     glPopMatrix();
 
-	ImGui::Button("trou du cul");
+
+	ImGui::Checkbox("Edition mode", &GLOBALS::editing);
+	if (ImGui::Combo("Animation", &GLOBALS::animationNbr, GLOBALS::animationNames, 4))
+	{
+		if (GLOBALS::animationNbr == 0)
+		{
+			if (GLOBALS::timeline != nullptr)
+			{
+				GLOBALS::timeline.reset();
+			}
+		}
+		else
+		{
+			GLOBALS::timeline = std::make_unique<Timeline>();
+			if (!GLOBALS::timeline->load(GLOBALS::animationNames[GLOBALS::animationNbr]))
+			{ 
+				std::cerr << "Error loading file : " << GLOBALS::animationNames[GLOBALS::animationNbr] << std::endl;
+				return;
+			}
+		}
+	}
+	if (GLOBALS::editing)
+	{
+		if (ImGui::InputInt("Frames", &GLOBALS::frames, 1, 10))
+		{
+			if (GLOBALS::frames < 0)
+			{
+				GLOBALS::frames = 0;
+				return;
+			}
+		}
+	}
+	else
+	{
+		ImGui::Combo("Transition type", &GLOBALS::transitionMode, GLOBALS::transitionNames, 4);
+	}
 
 	ImGui::Render();
     glutSwapBuffers();
