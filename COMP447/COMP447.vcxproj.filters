@@ -71,5 +71,8 @@
     <ClInclude Include="..\447codebase\Globals.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="vendors\Keyframe.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

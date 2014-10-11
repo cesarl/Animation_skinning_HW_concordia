@@ -31,6 +31,7 @@
     <ClInclude Include="vendors\imgui\imgui.h" />
     <ClInclude Include="vendors\imgui\stb_image.h" />
     <ClInclude Include="vendors\imgui\stb_textedit.h" />
+    <ClInclude Include="vendors\Keyframe.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{92914A28-A331-498C-92B7-7FB0B0198EC8}</ProjectGuid>
