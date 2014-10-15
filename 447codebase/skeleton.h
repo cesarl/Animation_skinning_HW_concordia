@@ -5,6 +5,8 @@
 #include <fstream>
 #include <cstdlib>
 #include <glm/glm.hpp>
+#include <array>
+#include <Keyframe.hpp>
 
 #ifdef __APPLE__
 #include <GLUT/glut.h>
@@ -55,6 +57,7 @@ private:
     /*Update screen coordinates of joints*/
     void updateScreenCoord();
 public:
+	std::unique_ptr<Timeline> timeline = nullptr;
     std::vector<Joint> joints;
     bool hasJointSelected;   
 	std::size_t selectedJoint;
@@ -63,9 +66,10 @@ public:
 	GLfloat* verticesCopy;
 	GLfloat* normals;
 	GLfloat* normalsCopy;
+	std::array<glm::mat4, 17> interpolatedMatrix;
+	void interpolate();
 
-
-    Skeleton(){hasJointSelected = false;};
+	Skeleton(){ hasJointSelected = false; interpolatedMatrix.fill(glm::mat4(1)); };
 	~Skeleton();
     /*
      * Load Skeleton file
@@ -94,6 +98,8 @@ public:
 	void initSkeleton(std::size_t rootJoint);
 
 	void update(std::size_t rootJoint);
+
+	void preupdate(std::size_t rootJoint);
 
 	bool loadWeights(const std::string &file);
 

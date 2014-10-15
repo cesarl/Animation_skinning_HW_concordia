@@ -14,6 +14,7 @@
 #include "skeleton.h"
 #include "defMesh.h"
 #include "ImguiConfig.hpp"
+#include <glm/gtc/quaternion.hpp>
 
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -294,12 +295,6 @@ void mouseEvent(int button, int state, int x, int y)
     _mouseX = x;
     _mouseY = y;
 
-	ImguiConf::scroll_callback(x, y);
-	mouse_x = x;
-	mouse_y = y;
-	lMouse = _mouseLeft;
-	rMouse = _mouseRight;
-
     if (state == GLUT_UP)
 	switch (button) {
     case GLUT_LEFT_BUTTON:
@@ -342,6 +337,11 @@ void mouseEvent(int button, int state, int x, int y)
         break;
         //std::cout<<button<<std::endl;
 	}
+	ImguiConf::scroll_callback(x, y);
+	mouse_x = x;
+	mouse_y = y;
+	lMouse = _mouseLeft;
+	rMouse = _mouseRight;
 
     glGetIntegerv(GL_VIEWPORT, viewport);
     pos(&_dragPosX, &_dragPosY, &_dragPosZ, x, y, viewport);
@@ -435,6 +435,9 @@ void mouseMoveEvent(int x, int y)
      */
     else    
     {
+		if (myDefMesh.mySkeleton.timeline == nullptr)
+			return;
+
 		GLint vp[4];
 		glGetIntegerv(GL_VIEWPORT, vp);
 		double proj[16];
@@ -446,12 +449,17 @@ void mouseMoveEvent(int x, int y)
 
 		if (myDefMesh.mySkeleton.selectedJoint == 0)
 			return;
-		Joint &joint = myDefMesh.mySkeleton.joints[myDefMesh.mySkeleton.selectedJoint];
-		Joint &parent = myDefMesh.mySkeleton.joints[joint.parent];
+		auto frame = myDefMesh.mySkeleton.timeline->createFrame(GLOBALS::frames);
+		auto &quat = frame->orientations[myDefMesh.mySkeleton.selectedJoint - 1];
+		quat = glm::toQuat(glm::rotate(glm::toMat4(quat), mouseDepX >= 0.0 ? 4.0f : -4.0f, glm::vec3(_x, _y, _z)));
 
-		joint.local = glm::rotate(joint.local * glm::inverse(joint.localOffset), mouseDepX >= 0.0 ? 4.0f : -4.0f, glm::vec3(_x, _y, _z)) * joint.localOffset;
+		
+		//Joint &joint = myDefMesh.mySkeleton.joints[myDefMesh.mySkeleton.selectedJoint];
+		//Joint &parent = myDefMesh.mySkeleton.joints[joint.parent];
 
-		myDefMesh.mySkeleton.update(parent.id);
+		//joint.local = glm::rotate(joint.local * glm::inverse(joint.localOffset), mouseDepX >= 0.0 ? 4.0f : -4.0f, glm::vec3(_x, _y, _z)) * joint.localOffset;
+		myDefMesh.mySkeleton.interpolate();
+		//myDefMesh.mySkeleton.update(parent.id);
     }
 }
 void display()
@@ -515,20 +523,28 @@ void display()
 	{
 		if (GLOBALS::animationNbr == 0)
 		{
-			if (GLOBALS::timeline != nullptr)
+			if (myDefMesh.mySkeleton.timeline != nullptr)
 			{
-				GLOBALS::timeline.reset();
+				myDefMesh.mySkeleton.timeline.release();
 			}
 		}
 		else
 		{
-			GLOBALS::timeline = std::make_unique<Timeline>();
-			if (!GLOBALS::timeline->load(GLOBALS::animationNames[GLOBALS::animationNbr]))
+			if (myDefMesh.mySkeleton.timeline)
+			{
+				myDefMesh.mySkeleton.timeline->save();
+				myDefMesh.mySkeleton.timeline.release();
+				myDefMesh.mySkeleton.timeline = nullptr;
+			}
+			myDefMesh.mySkeleton.timeline = std::make_unique<Timeline>();
+			if (!myDefMesh.mySkeleton.timeline->load(GLOBALS::animationNames[GLOBALS::animationNbr]))
 			{ 
 				std::cerr << "Error loading file : " << GLOBALS::animationNames[GLOBALS::animationNbr] << std::endl;
 				return;
 			}
 		}
+		GLOBALS::frames = 0;
+		myDefMesh.mySkeleton.interpolate();
 	}
 	if (GLOBALS::editing)
 	{
@@ -539,6 +555,8 @@ void display()
 				GLOBALS::frames = 0;
 				return;
 			}
+			if (myDefMesh.mySkeleton.timeline)
+				myDefMesh.mySkeleton.timeline->createFrame(GLOBALS::frames);
 		}
 	}
 	else

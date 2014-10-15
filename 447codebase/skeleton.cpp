@@ -4,6 +4,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "glm.h"
 #include <limits>
+#include "Globals.hpp"
 
 /*
  * Load skeleton file
@@ -41,7 +42,7 @@ void Skeleton::loadSkeleton(std::string skelFileName)
 		}
 	}
 	initSkeleton(0);
-	update(0);
+//	update(0);
 
 }
 
@@ -183,6 +184,28 @@ void Skeleton::initSkeleton(std::size_t rootJoint)
 }
 
 
+void Skeleton::preupdate(std::size_t rootJoint)
+{
+	if (rootJoint >= joints.size() || !timeline)
+		return;
+	auto &joint = joints[rootJoint];
+	if (rootJoint > 0 && joint.parent != 0)
+	{
+		auto &f = timeline->getFrame(GLOBALS::frames);
+		auto &a = f->orientations[rootJoint - 1];
+		auto &p = f->orientations[joint.parent - 1];
+		a *= p;
+	}
+	
+
+//	glm::vec4 p = joint.global * glm::vec4(0,0,0,1);
+//	joint.position = glm::vec3(p.x, p.y, p.z);
+	for (auto &e : joint.children)
+	{
+		update(e);
+	}
+}
+
 void Skeleton::update(std::size_t rootJoint)
 {
 	if (rootJoint >= joints.size())
@@ -190,14 +213,26 @@ void Skeleton::update(std::size_t rootJoint)
 	auto &joint = joints[rootJoint];
 	if (rootJoint != 0)
 	{
+		auto &joint = joints[rootJoint];
+		//joint.local = glm::rotate(joint.local * glm::inverse(joint.localOffset), mouseDepX >= 0.0 ? 4.0f : -4.0f, glm::vec3(_x, _y, _z)) * joint.localOffset;
+//		interpolatedMatrix[i] = glm::inverse(joint.localOffset) * timeline->getInterpolatedValue(i, GLOBALS::frames, (InterpolationType)GLOBALS::transitionMode) * joint.localOffset;
+		joint.local = joint.localOffset * glm::inverse(joint.localOffset)
+			* timeline->getInterpolatedValue(rootJoint - 1, GLOBALS::frames, (InterpolationType)GLOBALS::transitionMode)
+			* joint.localOffset;
+
 		auto &parent = joints[joint.parent];
 		joint.global =  parent.global * joint.local;
+		auto p = joint.global * glm::vec4(0, 0, 0, 1);
+		joint.position = glm::vec3(p.x, p.y, p.z);
 	}
 	else
+	{
 		joint.global = joint.local;
+	}
+	
 
-	glm::vec4 p = joint.global * glm::vec4(0,0,0,1);
-	joint.position = glm::vec3(p.x, p.y, p.z);
+//	glm::vec4 p = joint.global * glm::vec4(0,0,0,1);
+//	joint.position = glm::vec3(p.x, p.y, p.z);
 	for (auto &e : joint.children)
 	{
 		update(e);
@@ -296,4 +331,36 @@ Skeleton::~Skeleton()
 		delete normalsCopy;
 		normalsCopy = nullptr;
 	}
+}
+
+void Skeleton::interpolate()
+{
+	//preupdate(0);
+
+	if (!timeline)
+		return;
+	auto frame = timeline->getFrame(GLOBALS::frames);
+
+	//if (!frame) // we interpolate
+	//{
+
+//	for (unsigned int i = 0; i < interpolatedMatrix.size(); ++i)
+//	{
+//		auto &joint = joints[i + 1];
+//		//joint.local = glm::rotate(joint.local * glm::inverse(joint.localOffset), mouseDepX >= 0.0 ? 4.0f : -4.0f, glm::vec3(_x, _y, _z)) * joint.localOffset;
+////		interpolatedMatrix[i] = glm::inverse(joint.localOffset) * timeline->getInterpolatedValue(i, GLOBALS::frames, (InterpolationType)GLOBALS::transitionMode) * joint.localOffset;
+//		interpolatedMatrix[i] = joint.local
+//			* glm::inverse(joint.localOffset)
+//			* timeline->getInterpolatedValue(i, GLOBALS::frames, (InterpolationType)GLOBALS::transitionMode)
+//			* joint.localOffset;
+//	}
+
+	update(0);
+
+	for (unsigned int i = 0; i < interpolatedMatrix.size(); ++i)
+	{
+	//	interpolatedMatrix[i] = /*joints[i + 1].local * */glm::inverse(joints[i + 1].offset) * interpolatedMatrix[i] * joints[i + 1].offset;
+	}
+
+	//}
 }

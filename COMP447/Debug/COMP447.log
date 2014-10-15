@@ -1,11 +1,34 @@
-﻿Build started 25/09/2014 10:32:25.
+﻿Build started 11/10/2014 15:53:09.
      1>Project "C:\Users\cesar\Documents\GitHub\Animation_skinning_HW_concordia\COMP447\COMP447.vcxproj" on node 2 (Build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\COMP447.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
-         All outputs are up-to-date.
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I\freeglut\include /I"C:\Program Files (x86)\Visual Leak Detector\include" /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt ..\447codebase\skeleton.cpp
+         skeleton.cpp
+     1>c:\users\cesar\documents\github\animation_skinning_hw_concordia\comp447\vendors\keyframe.hpp(106): warning C4244: 'argument' : conversion from 'double' to 'unsigned int', possible loss of data
+     1>c:\users\cesar\documents\github\animation_skinning_hw_concordia\comp447\vendors\keyframe.hpp(116): warning C4244: 'argument' : conversion from 'double' to 'const float', possible loss of data
+     1>c:\users\cesar\documents\github\animation_skinning_hw_concordia\447codebase\skeleton.cpp(23): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\cesar\documents\github\animation_skinning_hw_concordia\447codebase\skeleton.cpp(24): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\cesar\documents\github\animation_skinning_hw_concordia\447codebase\skeleton.cpp(25): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\cesar\documents\github\animation_skinning_hw_concordia\447codebase\skeleton.cpp(66): warning C4305: 'argument' : truncation from 'double' to 'GLfloat'
+     1>c:\users\cesar\documents\github\animation_skinning_hw_concordia\447codebase\skeleton.cpp(67): warning C4305: 'argument' : truncation from 'double' to 'GLfloat'
+     1>c:\users\cesar\documents\github\animation_skinning_hw_concordia\447codebase\skeleton.cpp(77): warning C4305: 'argument' : truncation from 'double' to 'GLfloat'
+     1>c:\users\cesar\documents\github\animation_skinning_hw_concordia\447codebase\skeleton.cpp(79): warning C4305: 'argument' : truncation from 'double' to 'GLfloat'
+     1>c:\users\cesar\documents\github\animation_skinning_hw_concordia\447codebase\skeleton.cpp(106): warning C4244: '=' : conversion from 'GLdouble' to 'float', possible loss of data
+     1>c:\users\cesar\documents\github\animation_skinning_hw_concordia\447codebase\skeleton.cpp(107): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\cesar\documents\github\animation_skinning_hw_concordia\447codebase\skeleton.cpp(220): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\cesar\documents\github\animation_skinning_hw_concordia\447codebase\skeleton.cpp(227): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\cesar\documents\github\animation_skinning_hw_concordia\447codebase\skeleton.cpp(235): warning C4018: '<=' : signed/unsigned mismatch
+     1>c:\users\cesar\documents\github\animation_skinning_hw_concordia\447codebase\skeleton.cpp(241): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\cesar\documents\github\animation_skinning_hw_concordia\comp447\vendors\keyframe.hpp(151): warning C4715: 'Timeline::getInterpolatedValue' : not all control paths return a value
        Link:
-         All outputs are up-to-date.
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\cesar\Documents\GitHub\Animation_skinning_HW_concordia\Debug\COMP447.exe" /INCREMENTAL /NOLOGO /LIBPATH:..\freeglut\lib /LIBPATH:"C:\Program Files (x86)\Visual Leak Detector\lib\Win32" kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\cesar\Documents\GitHub\Animation_skinning_HW_concordia\Debug\COMP447.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\cesar\Documents\GitHub\Animation_skinning_HW_concordia\Debug\COMP447.lib" /MACHINE:X86 Debug\defMesh.obj
+         Debug\glm.obj
+         Debug\glMain.obj
+         Debug\simpleMath.obj
+         Debug\skeleton.obj
+         Debug\splitstring.obj
+         Debug\imgui.obj
          COMP447.vcxproj -> C:\Users\cesar\Documents\GitHub\Animation_skinning_HW_concordia\Debug\COMP447.exe
        FinalizeBuildStatus:
          Deleting file "Debug\COMP447.tlog\unsuccessfulbuild".
@@ -14,4 +37,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.04
+Time Elapsed 00:00:01.50
