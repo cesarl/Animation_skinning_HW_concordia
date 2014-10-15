@@ -458,7 +458,7 @@ void mouseMoveEvent(int x, int y)
 		//Joint &parent = myDefMesh.mySkeleton.joints[joint.parent];
 
 		//joint.local = glm::rotate(joint.local * glm::inverse(joint.localOffset), mouseDepX >= 0.0 ? 4.0f : -4.0f, glm::vec3(_x, _y, _z)) * joint.localOffset;
-		myDefMesh.mySkeleton.interpolate();
+		myDefMesh.mySkeleton.interpolate(GLOBALS::frames);
 		//myDefMesh.mySkeleton.update(parent.id);
     }
 }
@@ -544,7 +544,7 @@ void display()
 			}
 		}
 		GLOBALS::frames = 0;
-		myDefMesh.mySkeleton.interpolate();
+		myDefMesh.mySkeleton.interpolate(GLOBALS::frames);
 	}
 	if (GLOBALS::editing)
 	{
@@ -557,6 +557,7 @@ void display()
 			}
 			if (myDefMesh.mySkeleton.timeline)
 				myDefMesh.mySkeleton.timeline->createFrame(GLOBALS::frames);
+			myDefMesh.mySkeleton.interpolate(GLOBALS::frames);
 		}
 	}
 	else
