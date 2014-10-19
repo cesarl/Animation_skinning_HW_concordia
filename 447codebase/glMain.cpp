@@ -238,6 +238,7 @@ void init()
      getMatrix();
      glPopMatrix();
 	 ImguiConf::InitImGui();
+	 myDefMesh.mySkeleton.timeline = std::make_unique<Timeline>();
 }
 
 void changeSize(int w, int h)
@@ -459,7 +460,6 @@ void mouseMoveEvent(int x, int y)
 		//Joint &parent = myDefMesh.mySkeleton.joints[joint.parent];
 
 		//joint.local = glm::rotate(joint.local * glm::inverse(joint.localOffset), mouseDepX >= 0.0 ? 4.0f : -4.0f, glm::vec3(_x, _y, _z)) * joint.localOffset;
-		myDefMesh.mySkeleton.interpolate(GLOBALS::frames);
 		//myDefMesh.mySkeleton.update(parent.id);
     }
 }
@@ -522,15 +522,7 @@ void display()
 	ImGui::Checkbox("Edition mode", &GLOBALS::editing);
 	if (ImGui::Combo("Animation", &GLOBALS::animationNbr, GLOBALS::animationNames, 4))
 	{
-		if (GLOBALS::animationNbr == 0)
-		{
-			if (myDefMesh.mySkeleton.timeline != nullptr)
-			{
-				myDefMesh.mySkeleton.timeline.release();
-			}
-		}
-		else
-		{
+
 			if (myDefMesh.mySkeleton.timeline)
 			{
 				myDefMesh.mySkeleton.timeline->save();
@@ -538,43 +530,42 @@ void display()
 				myDefMesh.mySkeleton.timeline = nullptr;
 			}
 			myDefMesh.mySkeleton.timeline = std::make_unique<Timeline>();
-			if (!myDefMesh.mySkeleton.timeline->load(GLOBALS::animationNames[GLOBALS::animationNbr]))
-			{ 
-				std::cerr << "Error loading file : " << GLOBALS::animationNames[GLOBALS::animationNbr] << std::endl;
-				return;
+			if (!GLOBALS::animationNbr == 0)
+			{
+				if (!myDefMesh.mySkeleton.timeline->load(GLOBALS::animationNames[GLOBALS::animationNbr]))
+				{
+					std::cerr << "Error loading file : " << GLOBALS::animationNames[GLOBALS::animationNbr] << std::endl;
+					return;
+				}
 			}
-		}
+
 		GLOBALS::frames = 0;
-		myDefMesh.mySkeleton.interpolate(GLOBALS::frames);
 	}
 	if (GLOBALS::editing)
 	{
 		if (ImGui::InputFloat("Frames", &GLOBALS::frames, 1, 10, 1))
 		{
+			GLOBALS::frames = floor(GLOBALS::frames);
 			if (GLOBALS::frames < 0)
 			{
 				GLOBALS::frames = 0;
-				return;
 			}
 			if (myDefMesh.mySkeleton.timeline)
 				myDefMesh.mySkeleton.timeline->createFrame(GLOBALS::frames);
-			myDefMesh.mySkeleton.interpolate(GLOBALS::frames);
 		}
 	}
 	else
 	{
-		if (ImGui::InputFloat("Frames", &GLOBALS::frames, 0.01f, 0.1f))
+		GLOBALS::frames += 0.01f;
+		ImGui::InputFloat("Frames", &GLOBALS::frames, 0.01f, 0.1f);
+		if (GLOBALS::frames < 0 || !myDefMesh.mySkeleton.timeline || !myDefMesh.mySkeleton.timeline->hasFrame(GLOBALS::frames))
 		{
-			if (GLOBALS::frames < 0)
-			{
-				GLOBALS::frames = 0;
-				return;
-			}
-			myDefMesh.mySkeleton.interpolate(GLOBALS::frames);
+			GLOBALS::frames = 0;
 		}
 		ImGui::Combo("Transition type", &GLOBALS::transitionMode, GLOBALS::transitionNames, 4);
 	}
 
+	myDefMesh.mySkeleton.interpolate(GLOBALS::frames, (InterpolationType)GLOBALS::transitionMode);
 	ImGui::Render();
     glutSwapBuffers();
 }

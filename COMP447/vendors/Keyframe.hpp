@@ -34,7 +34,11 @@ struct Timeline
 	unsigned int from = 0;
 	unsigned int to = 0;
 	std::string path;
-
+	bool hasFrame(float t)
+	{
+		unsigned int tt = floor(t);
+		return (list.find(t) != std::end(list));
+	}
 	~Timeline()
 	{
 	}
@@ -67,7 +71,7 @@ struct Timeline
 	bool save()
 	{
 		if (path.empty())
-			assert(false);
+			return true;
 		std::ofstream file(path);
 		if (!file.is_open())
 			return false;
