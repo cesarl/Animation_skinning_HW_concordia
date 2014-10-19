@@ -7,6 +7,8 @@
 #include <map>
 #include "splitstring.h"
 #include <memory>
+#include <glm/gtx/matrix_interpolation.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 enum InterpolationType
 {
@@ -130,9 +132,18 @@ struct Timeline
 	//	}
 	//}
 
-	glm::mat4 getInterpolatedValue(unsigned int join, unsigned int frame, InterpolationType type)
+	glm::vec3 linearInterpolate(glm::vec3 from, glm::vec3 to, float dt)
 	{
-		if (type == Matrix)
+		if (dt > 1.0f)
+			return to;
+		else if (dt < 0.0)
+			return from;
+		return ((1.0f - dt) * from) + (dt * to);
+	}
+
+	glm::mat4 getInterpolatedValue(unsigned int join, float frame, InterpolationType type)
+	{
+		if (frame == round(frame))
 		{
 			glm::mat4 res(1);
 			auto f = getFrame(frame);
@@ -141,13 +152,44 @@ struct Timeline
 				res = glm::mat4_cast(f->orientations[join]);
 				return res;
 			}
-			else
+			return res;
+		}
+		else
+		{
+			glm::mat4 res(1);
+			auto from = getFrame(floor(frame));
+			auto to = getFrame(ceil(frame));
+			float delta = frame - floor(frame);
+
+			if (!from || !to)
+				return res;
+
+			if (type == Matrix)
 			{
-				//auto from = getFrom(index);
-				//auto to = getTo(index);
-				//res = glm::mix()
+				res = glm::interpolate(glm::mat4_cast(from->orientations[join]), glm::mat4_cast(to->orientations[join]), delta);
 				return res;
 			}
+			else if (type == Euler_angles)
+			{
+				auto fromVec = glm::eulerAngles(from->orientations[join]);
+				auto toVec = glm::eulerAngles(to->orientations[join]);
+				auto inter = linearInterpolate(fromVec, toVec, delta);
+				res = glm::rotate(res, inter.x, glm::vec3(1, 0, 0));
+				res = glm::rotate(res, inter.y, glm::vec3(0, 1, 0));
+				res = glm::rotate(res, inter.z, glm::vec3(0, 0, 1));
+				return res;
+			}
+			else if (type == Quaternion_linear)
+			{
+				res = glm::mat4_cast(glm::lerp(from->orientations[join], to->orientations[join], delta));
+				return res;
+			}
+			else if (type == Quaternion_SLERP)
+			{
+				res = glm::mat4_cast(glm::slerp(from->orientations[join], to->orientations[join], delta));
+				return res;
+			}
+
 		}
 	}
 };

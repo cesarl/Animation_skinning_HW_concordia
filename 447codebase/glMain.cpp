@@ -449,6 +449,7 @@ void mouseMoveEvent(int x, int y)
 
 		if (myDefMesh.mySkeleton.selectedJoint == 0)
 			return;
+		//Joint &joint = myDefMesh.mySkeleton.joints[myDefMesh.mySkeleton.selectedJoint];
 		auto frame = myDefMesh.mySkeleton.timeline->createFrame(GLOBALS::frames);
 		auto &quat = frame->orientations[myDefMesh.mySkeleton.selectedJoint - 1];
 		quat = glm::toQuat(glm::rotate(glm::toMat4(quat), mouseDepX >= 0.0 ? 4.0f : -4.0f, glm::vec3(_x, _y, _z)));
@@ -548,7 +549,7 @@ void display()
 	}
 	if (GLOBALS::editing)
 	{
-		if (ImGui::InputInt("Frames", &GLOBALS::frames, 1, 10))
+		if (ImGui::InputFloat("Frames", &GLOBALS::frames, 1, 10, 1))
 		{
 			if (GLOBALS::frames < 0)
 			{
@@ -562,6 +563,15 @@ void display()
 	}
 	else
 	{
+		if (ImGui::InputFloat("Frames", &GLOBALS::frames, 0.01f, 0.1f))
+		{
+			if (GLOBALS::frames < 0)
+			{
+				GLOBALS::frames = 0;
+				return;
+			}
+			myDefMesh.mySkeleton.interpolate(GLOBALS::frames);
+		}
 		ImGui::Combo("Transition type", &GLOBALS::transitionMode, GLOBALS::transitionNames, 4);
 	}
 

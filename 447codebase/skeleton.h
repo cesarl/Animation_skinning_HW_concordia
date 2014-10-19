@@ -67,7 +67,7 @@ public:
 	GLfloat* normals;
 	GLfloat* normalsCopy;
 	std::array<glm::mat4, 17> interpolatedMatrix;
-	void interpolate(unsigned int frame);
+	void interpolate(float frame);
 
 	Skeleton(){ hasJointSelected = false; interpolatedMatrix.fill(glm::mat4(1)); };
 	~Skeleton();
@@ -97,7 +97,7 @@ public:
 
 	void initSkeleton(std::size_t rootJoint);
 
-	void update(std::size_t rootJoint, unsigned int frame);
+	void update(std::size_t rootJoint, float frame);
 
 	bool loadWeights(const std::string &file);
 

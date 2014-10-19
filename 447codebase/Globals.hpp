@@ -23,6 +23,6 @@
 		static int transitionMode = Matrix;
         static const char* animationNames[] = { "none", "wave.anim", "break-dance.anim", "dance.anim" };
 		static int animationNbr = 0;
-		static int frames = 0;
+		static float frames = 0;
 	};
 
