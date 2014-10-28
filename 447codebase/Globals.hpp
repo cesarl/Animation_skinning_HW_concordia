@@ -22,7 +22,9 @@
 		static const char* transitionNames[4] = { "matrix", "euler angles", "quaternion linear", "quaternion SLERP"};
 		static int transitionMode = Matrix;
         static const char* animationNames[] = { "none", "wave.anim", "break-dance.anim", "dance.anim" };
+		static std::string specialFile;
 		static int animationNbr = 0;
 		static float frames = 0;
+		static float speed = 0.01;
 	};
 

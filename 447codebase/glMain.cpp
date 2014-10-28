@@ -240,6 +240,8 @@ void init()
 	glPopMatrix();
 	ImguiConf::InitImGui();
 	myDefMesh.mySkeleton.timeline = std::make_unique<Timeline>();
+	if (!GLOBALS::specialFile.empty())
+		myDefMesh.mySkeleton.timeline->load(GLOBALS::specialFile);
 }
 
 void changeSize(int w, int h)
@@ -283,9 +285,85 @@ void handleKeyPress(unsigned char key, int x, int y)
 	switch (key)
 	{
 	case 'm':
-		meshModel = (meshModel + 1) % 3; break;
+		//meshModel = (meshModel + 1) % 3; break;
+		GLOBALS::editing = !GLOBALS::editing;
+		GLOBALS::frames = 0;
+		break;
+	case '+':
+		if (GLOBALS::editing)
+		{
+			++GLOBALS::frames;
+			GLOBALS::frames = floor(GLOBALS::frames);
+			if (GLOBALS::frames < 0)
+			{
+				GLOBALS::frames = 0;
+			}
+			if (myDefMesh.mySkeleton.timeline)
+				myDefMesh.mySkeleton.timeline->createFrame(GLOBALS::frames);
+		}
+		break;
+	case '-':
+		if (GLOBALS::editing)
+		{
+			if (GLOBALS::frames == 0)
+				break;
+			--GLOBALS::frames;
+			GLOBALS::frames = floor(GLOBALS::frames);
+			if (GLOBALS::frames < 0)
+			{
+				GLOBALS::frames = 0;
+			}
+			if (myDefMesh.mySkeleton.timeline)
+				myDefMesh.mySkeleton.timeline->createFrame(GLOBALS::frames);
+		}
+		break;
+	case 'j' :
+		GLOBALS::speed -= 0.005;
+		break;
+	case 'k':
+		GLOBALS::speed += 0.005;
+		break;
+	case 'l':
+		if (myDefMesh.mySkeleton.timeline)
+		{
+			myDefMesh.mySkeleton.timeline->save();
+			myDefMesh.mySkeleton.timeline.release();
+			myDefMesh.mySkeleton.timeline = nullptr;
+		}
+		myDefMesh.mySkeleton.timeline = std::make_unique<Timeline>();
+		if (!GLOBALS::animationNbr == 0)
+		{
+			if (!myDefMesh.mySkeleton.timeline->load("load.anim"))
+			{
+				std::cerr << "Error loading file : " << GLOBALS::animationNames[GLOBALS::animationNbr] << std::endl;
+				return;
+			}
+		}
+		GLOBALS::animationNbr = 0;
+		break;
+	case 's':
+		if (myDefMesh.mySkeleton.timeline)
+		{
+			myDefMesh.mySkeleton.timeline->path = "save.anim";
+			myDefMesh.mySkeleton.timeline->save();
+		}
+		GLOBALS::animationNbr = 0;
+	break;
+	case '1':
+		GLOBALS::transitionMode = 0;
+		break;
+	case '2':
+		GLOBALS::transitionMode = 1;
+		break;
+	case '3':
+		GLOBALS::transitionMode = 2;
+		break;
+	case '4':
+		GLOBALS::transitionMode = 3;
+		break;
 	case 'q':
 		exit(0);
+		break;
 	}
 }
 
@@ -581,7 +659,7 @@ void display()
 	{
 		GLOBALS::frames = 0;
 	}
-	if (ImGui::Combo("Animation", &GLOBALS::animationNbr, GLOBALS::animationNames, 4))
+	if (GLOBALS::specialFile.empty() && ImGui::Combo("Animation", &GLOBALS::animationNbr, GLOBALS::animationNames, 4))
 	{
 
 		if (myDefMesh.mySkeleton.timeline)
@@ -617,7 +695,7 @@ void display()
 	}
 	else
 	{
-		GLOBALS::frames += 0.01f;
+		GLOBALS::frames += GLOBALS::speed;
 		ImGui::Text(("Frame : " + std::to_string(GLOBALS::frames)).c_str());
 //		ImGui::InputFloat("Frames", &GLOBALS::frames, 0.01f, 0.1f);
 		if (GLOBALS::frames < 0 || !myDefMesh.mySkeleton.timeline || !myDefMesh.mySkeleton.timeline->hasFrame(GLOBALS::frames))
@@ -651,6 +729,14 @@ int main(int argc, char **argv)
 	glutKeyboardFunc(handleKeyPress);
 	glutPassiveMotionFunc(mousePassiveFunc);
 
+	if (argc > 1)
+	{
+		GLOBALS::specialFile = argv[1];
+		std::ofstream file(GLOBALS::specialFile);
+		if (!file.is_open())
+			return -1;
+		file.close();
+	}
 
 	init();
 	glutMainLoop();

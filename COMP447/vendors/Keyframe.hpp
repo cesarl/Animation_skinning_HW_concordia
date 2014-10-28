@@ -90,7 +90,7 @@ struct Timeline
 	{
 		list.clear();
 
-		path = "../" + name;
+		path = name;
 		std::ifstream file(path);
 		if (!file.is_open())
 			return false;
