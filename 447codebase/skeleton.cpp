@@ -192,8 +192,6 @@ void Skeleton::update(std::size_t rootJoint, float frame, InterpolationType tran
 	if (rootJoint != 0)
 	{
 		auto &joint = joints[rootJoint];
-		//joint.local = glm::rotate(joint.local * glm::inverse(joint.localOffset), mouseDepX >= 0.0 ? 4.0f : -4.0f, glm::vec3(_x, _y, _z)) * joint.localOffset;
-//		interpolatedMatrix[i] = glm::inverse(joint.localOffset) * timeline->getInterpolatedValue(i, GLOBALS::frames, (InterpolationType)GLOBALS::transitionMode) * joint.localOffset;
 		joint.local = timeline->getInterpolatedValue(rootJoint - 1, frame, transitionMode)
 			* joint.localOffset;
 
@@ -207,9 +205,6 @@ void Skeleton::update(std::size_t rootJoint, float frame, InterpolationType tran
 		joint.global = joint.local;
 	}
 	
-
-//	glm::vec4 p = joint.global * glm::vec4(0,0,0,1);
-//	joint.position = glm::vec3(p.x, p.y, p.z);
 	for (auto &e : joint.children)
 	{
 		update(e, frame, transitionMode);

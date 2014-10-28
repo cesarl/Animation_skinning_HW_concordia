@@ -36,8 +36,8 @@ struct Timeline
 	std::string path;
 	bool hasFrame(float t)
 	{
-		unsigned int tt = floor(t);
-		return (list.find(t) != std::end(list));
+		unsigned int tt = ceil(t);
+		return (list.find(tt) != std::end(list));
 	}
 	~Timeline()
 	{
@@ -63,7 +63,7 @@ struct Timeline
 		t->indice = index;
 		if (list.size() == 1)
 			return t;
-		auto it = list.find(index);
+		auto it = list.find(index - 1);
 		t->orientations = it->second->orientations;
 		return t;
 	}

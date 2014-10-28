@@ -1,12 +1,17 @@
-﻿Build started 11/10/2014 15:53:09.
+﻿Build started 28/10/2014 08:57:46.
      1>Project "C:\Users\cesar\Documents\GitHub\Animation_skinning_HW_concordia\COMP447\COMP447.vcxproj" on node 2 (Build target(s)).
      1>InitializeBuildStatus:
-         Creating "Debug\COMP447.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+         Touching "Debug\COMP447.tlog\unsuccessfulbuild".
        ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I\freeglut\include /I"C:\Program Files (x86)\Visual Leak Detector\include" /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt ..\447codebase\skeleton.cpp
          skeleton.cpp
-     1>c:\users\cesar\documents\github\animation_skinning_hw_concordia\comp447\vendors\keyframe.hpp(106): warning C4244: 'argument' : conversion from 'double' to 'unsigned int', possible loss of data
-     1>c:\users\cesar\documents\github\animation_skinning_hw_concordia\comp447\vendors\keyframe.hpp(116): warning C4244: 'argument' : conversion from 'double' to 'const float', possible loss of data
+     1>c:\users\cesar\documents\github\animation_skinning_hw_concordia\comp447\vendors\keyframe.hpp(39): warning C4244: 'initializing' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>c:\users\cesar\documents\github\animation_skinning_hw_concordia\comp447\vendors\keyframe.hpp(40): warning C4244: 'argument' : conversion from 'float' to 'const unsigned int', possible loss of data
+     1>c:\users\cesar\documents\github\animation_skinning_hw_concordia\comp447\vendors\keyframe.hpp(112): warning C4244: 'argument' : conversion from 'double' to 'unsigned int', possible loss of data
+     1>c:\users\cesar\documents\github\animation_skinning_hw_concordia\comp447\vendors\keyframe.hpp(122): warning C4244: 'argument' : conversion from 'double' to 'const float', possible loss of data
+     1>c:\users\cesar\documents\github\animation_skinning_hw_concordia\comp447\vendors\keyframe.hpp(153): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>c:\users\cesar\documents\github\animation_skinning_hw_concordia\comp447\vendors\keyframe.hpp(164): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>c:\users\cesar\documents\github\animation_skinning_hw_concordia\comp447\vendors\keyframe.hpp(165): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
      1>c:\users\cesar\documents\github\animation_skinning_hw_concordia\447codebase\skeleton.cpp(23): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
      1>c:\users\cesar\documents\github\animation_skinning_hw_concordia\447codebase\skeleton.cpp(24): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
      1>c:\users\cesar\documents\github\animation_skinning_hw_concordia\447codebase\skeleton.cpp(25): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
@@ -16,11 +21,15 @@
      1>c:\users\cesar\documents\github\animation_skinning_hw_concordia\447codebase\skeleton.cpp(79): warning C4305: 'argument' : truncation from 'double' to 'GLfloat'
      1>c:\users\cesar\documents\github\animation_skinning_hw_concordia\447codebase\skeleton.cpp(106): warning C4244: '=' : conversion from 'GLdouble' to 'float', possible loss of data
      1>c:\users\cesar\documents\github\animation_skinning_hw_concordia\447codebase\skeleton.cpp(107): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\cesar\documents\github\animation_skinning_hw_concordia\447codebase\skeleton.cpp(220): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\cesar\documents\github\animation_skinning_hw_concordia\447codebase\skeleton.cpp(227): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\cesar\documents\github\animation_skinning_hw_concordia\447codebase\skeleton.cpp(235): warning C4018: '<=' : signed/unsigned mismatch
-     1>c:\users\cesar\documents\github\animation_skinning_hw_concordia\447codebase\skeleton.cpp(241): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\cesar\documents\github\animation_skinning_hw_concordia\comp447\vendors\keyframe.hpp(151): warning C4715: 'Timeline::getInterpolatedValue' : not all control paths return a value
+     1>c:\users\cesar\documents\github\animation_skinning_hw_concordia\447codebase\skeleton.cpp(221): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\cesar\documents\github\animation_skinning_hw_concordia\447codebase\skeleton.cpp(228): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\cesar\documents\github\animation_skinning_hw_concordia\447codebase\skeleton.cpp(236): warning C4018: '<=' : signed/unsigned mismatch
+     1>c:\users\cesar\documents\github\animation_skinning_hw_concordia\447codebase\skeleton.cpp(242): warning C4018: '<' : signed/unsigned mismatch
+         GLM: rotate function taking degrees as a parameter is deprecated. #define GLM_FORCE_RADIANS before including GLM headers to remove this message.
+         GLM: pitch function returning degrees is deprecated. #define GLM_FORCE_RADIANS before including GLM headers to remove this message.
+         GLM: yaw function returning degrees is deprecated. #define GLM_FORCE_RADIANS before including GLM headers to remove this message.
+         GLM: roll function returning degrees is deprecated. #define GLM_FORCE_RADIANS before including GLM headers to remove this message.
+     1>c:\users\cesar\documents\github\animation_skinning_hw_concordia\comp447\vendors\keyframe.hpp(198): warning C4715: 'Timeline::getInterpolatedValue' : not all control paths return a value
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\cesar\Documents\GitHub\Animation_skinning_HW_concordia\Debug\COMP447.exe" /INCREMENTAL /NOLOGO /LIBPATH:..\freeglut\lib /LIBPATH:"C:\Program Files (x86)\Visual Leak Detector\lib\Win32" kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\cesar\Documents\GitHub\Animation_skinning_HW_concordia\Debug\COMP447.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\cesar\Documents\GitHub\Animation_skinning_HW_concordia\Debug\COMP447.lib" /MACHINE:X86 Debug\defMesh.obj
          Debug\glm.obj
@@ -37,4 +46,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.50
+Time Elapsed 00:00:01.30
