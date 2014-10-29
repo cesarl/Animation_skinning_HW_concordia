@@ -732,7 +732,7 @@ int main(int argc, char **argv)
 	if (argc > 1)
 	{
 		GLOBALS::specialFile = argv[1];
-		std::ofstream file(GLOBALS::specialFile);
+		std::ifstream file(GLOBALS::specialFile);
 		if (!file.is_open())
 			return -1;
 		file.close();
