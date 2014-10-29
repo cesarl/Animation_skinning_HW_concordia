@@ -193,16 +193,6 @@ void getMatrix()
 
 void init()
 {
-	//OpenGL initialize functions goes here
-
-	/*glutInitContextVersion(4, 2);
-	glutInitContextProfile(GLUT_CORE_PROFILE);
-	glutInitContextFlags(GLUT_DEBUG);
-
-	std::cout<<"Vendor: "<<glGetString(GL_VENDOR)<<std::endl;
-	std::cout<<"Version: "<<glGetString(GL_VERSION)<<std::endl;
-	std::cout<<"GLSL: "<<glGetString(GL_SHADING_LANGUAGE_VERSION)<<std::endl;*/
-
 	//Light values and coordinates
 	GLfloat ambientLight[] = { 0.3f, 0.3f, 0.3f, 1.0f };
 	GLfloat diffuseLight[] = { 0.7f, 0.7f, 0.7f, 1.0f };
@@ -416,7 +406,6 @@ void mouseEvent(int button, int state, int x, int y)
 			break;
 		default:
 			break;
-			//std::cout<<button<<std::endl;
 	}
 	ImguiConf::scroll_callback(x, y);
 	mouse_x = x;
@@ -697,10 +686,8 @@ void display()
 	{
 		GLOBALS::frames += GLOBALS::speed;
 		ImGui::Text(("Frame : " + std::to_string(GLOBALS::frames)).c_str());
-//		ImGui::InputFloat("Frames", &GLOBALS::frames, 0.01f, 0.1f);
 		if (GLOBALS::frames < 0 || !myDefMesh.mySkeleton.timeline || !myDefMesh.mySkeleton.timeline->hasFrame(GLOBALS::frames))
 		{
-			std::cout << GLOBALS::frames << std::endl;
 			GLOBALS::frames = 0;
 		}
 		ImGui::Combo("Transition type", &GLOBALS::transitionMode, GLOBALS::transitionNames, 4);

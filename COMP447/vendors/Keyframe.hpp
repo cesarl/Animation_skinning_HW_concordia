@@ -128,14 +128,6 @@ struct Timeline
 		return true;
 	}
 
-	//std::shared_ptr<Keyframe> getFrom(unsigned int index)
-	//{
-	//	for (auto &e : list)
-	//	{
-	//		if ()
-	//	}
-	//}
-
 	glm::vec3 linearInterpolate(glm::vec3 from, glm::vec3 to, float dt)
 	{
 		if (dt > 1.0f)
